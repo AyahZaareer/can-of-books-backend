@@ -65,8 +65,8 @@ function getBookByUser(req, res) {
     console.log(email);
     userModel.find({ email: email }, function (err, ownerData) {
         if (err) res.send('didnt work');
-        console.log(ownerData[0].book)
-        res.send(ownerData[0].book);
+        console.log(ownerData[16].book)
+        res.send(ownerData[16].book);
     });
 }
 module.exports = getBookByUser;
