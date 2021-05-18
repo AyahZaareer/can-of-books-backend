@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
 });
 
 const mybookModel = mongoose.model('mybookModel', bookSchema);
-console.log(mybookModel);
+// console.log(mybookModel);
 const userModel = mongoose.model('userModel', userSchema);
 
 
@@ -79,10 +79,10 @@ seedUserCollection();
 
 function getBookByUser(req, res) {
     const { email } = req.query;
-    console.log(email);
+    // console.log(email);
     userModel.find({ email: email }, function (err, ownerData) {
         if (err) res.send('didnt work');
-        console.log(ownerData[16].book)
+        // console.log(ownerData[16].book)
         res.send(ownerData[16].book);
     });
 }
@@ -103,31 +103,26 @@ function createBook(req, res) {
 
 
 function deleteBook(req, res) {
-    const del = Number(req.params.del);
-    console.log(req.params);
+    const index = Number(req.params.id);
+    // console.log(req.params);
     const { email } = req.query;
     userModel.find({ email: email }, (error, ownerData) => {
         const newArrayOfBook = ownerData[16].book.filter((element, indEl) => {
             return indEl !== index;
         });
         ownerData[16].book = newArrayOfBook;
-
         ownerData[16].save();
-        res.send('book delete')
+        res.send(ownerData[16].book)
+        // if (err) {res.send(`YOU GOT AN ERROR! your error: ${err}`)};
     });
-
-
-
 }
-
-
 
 //-----------------------
 
 
 app.get('/book', getBookByUser);
 app.post('/book', createBook);
-app.delete('/book/:del', deleteBook);
+app.delete('/book/:id', deleteBook);
 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
 
