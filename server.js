@@ -88,13 +88,13 @@ function getBookByUser(req, res) {
 }
 
 
-function createBook (req, res){
-    const {name,description,status,email } = req.body;
-    userModel.find({email : email} , (error , ownerData)=> {
+function createBook(req, res) {
+    const { name, description, status, email } = req.body;
+    userModel.find({ email: email }, (error, ownerData) => {
         ownerData[16].book.push({
             name: name,
-            description : description,
-            status : status
+            description: description,
+            status: status
         })
         ownerData[16].save();
         res.send(ownerData[16].book);
@@ -102,11 +102,32 @@ function createBook (req, res){
 }
 
 
+function deleteBook(req, res) {
+    const del = Number(req.params.del);
+    console.log(req.params);
+    const { email } = req.query;
+    userModel.find({ email: email }, (error, ownerData) => {
+        const newArrayOfBook = ownerData[16].book.filter((element, indEl) => {
+            return indEl !== index;
+        });
+        ownerData[16].book = newArrayOfBook;
+
+        ownerData[16].save();
+        res.send('book delete')
+    });
+
+
+
+}
+
+
+
 //-----------------------
 
 
 app.get('/book', getBookByUser);
-app.post('/book' , createBook);
+app.post('/book', createBook);
+app.delete('/book/:del', deleteBook);
 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
 
