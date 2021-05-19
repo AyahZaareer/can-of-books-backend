@@ -117,12 +117,39 @@ function deleteBook(req, res) {
     });
 }
 
+
+function updateBook(req, res) {
+    const index = Number(req.params.id);
+    // console.log(req.params);
+    const { nameA, descriptionA, statusA, emailA } = req.body;
+    userModel.find({ email: emailA }, (error, ownerData) => {
+        console.log(ownerData[16]);
+        ownerData[16].book.splice(index, 1, {
+            name: nameA,
+            description: descriptionA,
+            status: statusA
+
+        });
+
+        
+        console.log('===============================');
+        ownerData[16].save();
+        console.log(ownerData[16]);
+        //////////////////////////////////////
+        res.send(ownerData[16].book)
+
+        // console.log(ownerData[16].book)
+        // if (err) {res.send(`YOU GOT AN ERROR! your error: ${err}`)};
+    });
+}
+
 //-----------------------
 
 
 app.get('/book', getBookByUser);
 app.post('/book', createBook);
 app.delete('/book/:id', deleteBook);
+app.put('/book/:id', updateBook);
 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
 
